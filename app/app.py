@@ -59,7 +59,7 @@ def form_insert_get():
 def form_insert_post():
     cursor = mysql.get_db().cursor()
     inputData = (request.form.get('fldYear'), request.form.get('fldMileage_thousands'), request.form.get('fldPrice'))
-    sql_insert_query = """INSERT INTO ford_escort (fldYear,fldMileage_thousands,fldPrice) VALUES (%s, %s,%s) """
+    sql_insert_query = """INSERT INTO ford_escort (fldYear,fldMileage_thousands,fldPrice) VALUES (%s,%s,%s) """
     cursor.execute(sql_insert_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
