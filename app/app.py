@@ -22,7 +22,7 @@ def index():
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM ford_escort')
     result = cursor.fetchall()
-    return render_template('index.html', title='Home', user=user, escort=result)
+    return render_template('index.html', title='Home', user=user, escorts=result)
 
 
 @app.route('/view/<int:escort_id>', methods=['GET'])
