@@ -95,19 +95,36 @@ def api_retrieve(escort_id) -> str:
 
 @app.route('/api/v1/escorts/', methods=['POST'])
 def api_add() -> str:
+
+    content = request.json
+
+    cursor = mysql.get_db().cursor()
+    inputData = (content['fldYear'], content['fldMileage_thousands'], content['fldPrice'])
+    sql_insert_query = """INSERT INTO ford_escort (fldYear,fldMileage_thousands,fldPrice) VALUES (%s,%s,%s) """
+    cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
     resp = Response(status=201, mimetype='application/json')
     return resp
-
 
 @app.route('/api/v1/escorts/<int:escort_id>', methods=['PUT'])
 def api_edit(escort_id) -> str:
-    resp = Response(status=201, mimetype='application/json')
+    cursor = mysql.get_db().cursor()
+    content = request.json
+    inputData = (content['fldYear'], content['fldMileage_thousands'], content['fldPrice'],escort_id)
+    sql_update_query = """UPDATE ford_escort t SET t.fldYear = %s, t.fldMileage_thousands = %s, t.fldPrice = %s WHERE t.id = %s """
+    cursor.execute(sql_update_query, inputData)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
     return resp
 
 
-@app.route('/api/escorts/<int:escort_id>', methods=['DELETE'])
+@app.route('/api/v1/escorts/<int:escort_id>', methods=['DELETE'])
 def api_delete(escort_id) -> str:
-    resp = Response(status=210, mimetype='application/json')
+    cursor = mysql.get_db().cursor()
+    sql_delete_query = """DELETE FROM ford_escort WHERE id = %s """
+    cursor.execute(sql_delete_query, escort_id)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
     return resp
 
 
